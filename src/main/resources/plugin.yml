@@ -1,0 +1,16 @@
+name: ConnectPlugin
+version: '${version}'
+main: dev.silal.connectplugin.ConnectPlugin
+api-version: '1.17'
+
+commands:
+  link:
+    description: Link with discord
+  data:
+    description: Get/Set the data
+
+permissions:
+  connect.data.set:
+    default: op
+  connect.data.get:
+    default: op

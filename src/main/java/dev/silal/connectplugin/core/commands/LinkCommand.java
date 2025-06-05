@@ -30,11 +30,10 @@ public class LinkCommand implements CommandExecutor {
         Bukkit.getScheduler().runTaskAsynchronously(ConnectPlugin.getInstance(), () -> {
             try {
                 Request req = new Request("http://localhost:8080/connect/confirm/" + token).body(new JsonManager().addProperty("uuid", p.getUniqueId().toString())).method(Request.Method.POST).send();
-
                 JsonManager json = req.getResponseJson();
 
                 if (req.getResponseCode() == 200 && json.getInt("status") == 0) {
-                    p.sendMessage(Prefix.SYSTEM.key() + "You are now linked to §a" + json.getInt("id"));
+                    p.sendMessage(Prefix.SYSTEM.key() + "You are now linked to §a" + json.getNumber("id"));
                     return;
                 }
 

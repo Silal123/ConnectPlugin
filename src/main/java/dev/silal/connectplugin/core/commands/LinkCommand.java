@@ -22,14 +22,14 @@ public class LinkCommand implements CommandExecutor {
         if (!(sender instanceof Player p)) return true;
 
         if (args.length < 1) {
-            p.sendMessage(Prefix.SYSTEM.key() + "Please go to §a" + ConnectPlugin.FRE_BASE + "/connect§7 to link");
+            p.sendMessage(Prefix.SYSTEM.key() + "Please use the §a/link§7 command on a discord server with the ConnectBot on it!");
             return true;
         }
         String token = args[0];
 
         Bukkit.getScheduler().runTaskAsynchronously(ConnectPlugin.getInstance(), () -> {
             try {
-                Request req = new Request("http://localhost:8080/connect/confirm/" + token).body(new JsonManager().addProperty("uuid", p.getUniqueId().toString())).method(Request.Method.POST).send();
+                Request req = new Request(ConnectPlugin.API_BASE + "/connect/confirm/" + token).body(new JsonManager().addProperty("uuid", p.getUniqueId().toString())).method(Request.Method.POST).send();
                 JsonManager json = req.getResponseJson();
 
                 if (req.getResponseCode() == 200 && json.getInt("status") == 0) {

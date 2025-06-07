@@ -2,6 +2,7 @@ package dev.silal.connectplugin;
 
 import dev.silal.connectplugin.core.commands.DataCommand;
 import dev.silal.connectplugin.core.commands.LinkCommand;
+import dev.silal.connectplugin.core.commands.UnlinkCommand;
 import dev.silal.connectplugin.core.connection.DataStorage;
 import dev.silal.connectplugin.core.utils.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,6 +47,7 @@ public final class ConnectPlugin extends JavaPlugin {
         }
 
         getCommand("link").setExecutor(new LinkCommand());
+        getCommand("unlink").setExecutor(new UnlinkCommand());
         getCommand("data").setExecutor(new DataCommand());
     }
 

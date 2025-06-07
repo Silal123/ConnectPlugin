@@ -6,6 +6,8 @@ api-version: '1.17'
 commands:
   link:
     description: Link with discord
+  unlink:
+    description: Unlink with discord
   data:
     description: Get/Set the data
 

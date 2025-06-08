@@ -114,6 +114,9 @@ public class JsonManager {
         return jsonObject.has(key);
     }
     public String getString(String key) {
+        if (!jsonObject.has(key)) return null;
+        if (jsonObject.get(key) == null) return null;
+        if (jsonObject.get(key).isJsonNull()) return null;
         return jsonObject.get(key).getAsString();
     }
 
@@ -134,6 +137,8 @@ public class JsonManager {
     }
 
     public int getInt(String key) { return jsonObject.get(key).getAsInt(); }
+
+    public long getLong(String key) { return jsonObject.get(key).getAsLong(); }
 
     public List<String> getList(String key) {
         List<String> values = new ArrayList<>();

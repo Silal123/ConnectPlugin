@@ -94,13 +94,13 @@ public class UserData {
         }
     }
 
-    private JsonManager getDiscordData() throws UnexpectedConnectionError, UnknownError {
+    private JsonManager getDiscordData() throws UnexpectedConnectionError, UnknownUserError {
         try {
             Request request = new Request(ConnectPlugin.API_BASE + "/account/m/" + uuid.toString()).method(Request.Method.GET).send();
             int status = request.getResponseCode();
 
             if (status == 404) {
-                throw new UnknownError();
+                throw new UnknownUserError();
             }
 
             if (status != 200) {
@@ -113,15 +113,15 @@ public class UserData {
         }
     }
 
-    public int getDiscordId() throws UnexpectedConnectionError, UnknownError {
+    public long getDiscordId() throws UnexpectedConnectionError, UnknownUserError {
         JsonManager discordData = getDiscordData();
         if (!discordData.hasKey("id")) {
             throw new UnexpectedConnectionError();
         }
-        return discordData.getInt("id");
+        return discordData.getLong("id");
     }
 
-    public String getDiscordName() throws UnexpectedConnectionError, UnknownError {
+    public String getDiscordName() throws UnexpectedConnectionError, UnknownUserError {
         JsonManager discordData = getDiscordData();
         return discordData.hasKey("name") ? discordData.getString("name") : null;
     }

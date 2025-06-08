@@ -2,6 +2,11 @@ name: ConnectPlugin
 version: '${version}'
 main: dev.silal.connectplugin.ConnectPlugin
 api-version: '1.17'
+website: https://conbot.xyz
+description: Connect Minecraft and Discord
+authors: [Silal]
+
+softdepend: [PlaceholderAPI]
 
 commands:
   link:
@@ -13,6 +18,9 @@ commands:
   data:
     description: Get/Set the data
     aliases: [cdata, connectdata]
+  bot:
+    description: Get the bot invite
+    aliases: [cbot]
 
 permissions:
   connect.data.set:

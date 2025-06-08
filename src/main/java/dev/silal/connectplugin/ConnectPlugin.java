@@ -1,13 +1,16 @@
 package dev.silal.connectplugin;
 
+import dev.silal.connectplugin.core.commands.BotCommand;
 import dev.silal.connectplugin.core.commands.DataCommand;
 import dev.silal.connectplugin.core.commands.LinkCommand;
 import dev.silal.connectplugin.core.commands.UnlinkCommand;
 import dev.silal.connectplugin.core.commands.tabcompleter.DataCommandTabCompleter;
 import dev.silal.connectplugin.core.connection.DataStorage;
+import dev.silal.connectplugin.core.placeholderapi.ConnectPlaceholder;
 import dev.silal.connectplugin.core.utils.Configuration;
 import dev.silal.connectplugin.core.utils.JsonManager;
 import dev.silal.connectplugin.core.utils.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -63,12 +66,18 @@ public final class ConnectPlugin extends JavaPlugin {
             getLogger().warning("Please change the api token!");
         }
 
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new ConnectPlaceholder(this).register();
+        }
+
         getLogger().info("Setting up commands...");
         getCommand("link").setExecutor(new LinkCommand());
         getCommand("unlink").setExecutor(new UnlinkCommand());
 
         getCommand("data").setExecutor(new DataCommand());
         getCommand("data").setTabCompleter(new DataCommandTabCompleter());
+
+        getCommand("bot").setExecutor(new BotCommand());
     }
 
     @Override

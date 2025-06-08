@@ -5,6 +5,12 @@ plugins {
 group = "dev.silal"
 version = "1.0-SNAPSHOT"
 
+tasks.processResources {
+    filesMatching("plugin.yml") {
+        expand("version" to project.version)
+    }
+}
+
 repositories {
     mavenCentral()
     maven {

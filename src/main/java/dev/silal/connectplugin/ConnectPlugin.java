@@ -42,11 +42,14 @@ public final class ConnectPlugin extends JavaPlugin {
 
         config = new Configuration(this);
         dataStorage = new DataStorage(this);
+        getLogger().info("Api ready!");
 
+        getLogger().info("Checking api key...");
         if (config.getApiKey().equals("YOUR_API_TOKEN")) {
             getLogger().warning("Please change the api token!");
         }
 
+        getLogger().info("Setting up commands...");
         getCommand("link").setExecutor(new LinkCommand());
         getCommand("unlink").setExecutor(new UnlinkCommand());
 

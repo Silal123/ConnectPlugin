@@ -5,7 +5,7 @@ public enum Prefix {
     HEY("§c§lHey! §7", false),
     NO_X("§c§l[✖] ", false),
     CHECKPOINT_FINISH("§e§l[⭐] ", false),
-    SYSTEM("§cConnect", true);
+    SYSTEM("§aC§2o§an§2n§ae§2c§at", true);
 
     Prefix(String key, boolean prefix) {
         this.key = key;

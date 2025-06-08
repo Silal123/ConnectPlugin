@@ -3,6 +3,7 @@ package dev.silal.connectplugin;
 import dev.silal.connectplugin.core.commands.DataCommand;
 import dev.silal.connectplugin.core.commands.LinkCommand;
 import dev.silal.connectplugin.core.commands.UnlinkCommand;
+import dev.silal.connectplugin.core.commands.tabcompleter.DataCommandTabCompleter;
 import dev.silal.connectplugin.core.connection.DataStorage;
 import dev.silal.connectplugin.core.utils.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,8 +12,8 @@ import java.io.File;
 
 public final class ConnectPlugin extends JavaPlugin {
 
-    public static String API_BASE = "http://localhost:8080";
-    public static String FRE_BASE = "http://localhost:5173";
+    public static String API_BASE = "https://api.conbot.xyz";
+    public static String FRE_BASE = "https://localhost:5173";
 
     private static ConnectPlugin instance;
     public static ConnectPlugin getInstance() { return instance; }
@@ -48,7 +49,9 @@ public final class ConnectPlugin extends JavaPlugin {
 
         getCommand("link").setExecutor(new LinkCommand());
         getCommand("unlink").setExecutor(new UnlinkCommand());
+
         getCommand("data").setExecutor(new DataCommand());
+        getCommand("data").setTabCompleter(new DataCommandTabCompleter());
     }
 
     @Override

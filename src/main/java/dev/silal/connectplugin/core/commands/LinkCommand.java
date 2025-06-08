@@ -33,7 +33,7 @@ public class LinkCommand implements CommandExecutor {
                 JsonManager json = req.getResponseJson();
 
                 if (req.getResponseCode() == 200 && json.getInt("status") == 0) {
-                    p.sendMessage(Prefix.SYSTEM.key() + "You are now linked to §a" + json.getNumber("id"));
+                    p.sendMessage(Prefix.SYSTEM.key() + "You are now linked to §a" + (json.hasKey("name") ? json.getString("name") + " (" + json.getNumber("id") + ")" : json.getNumber("id")));
                     return;
                 }
 

@@ -6,10 +6,13 @@ api-version: '1.17'
 commands:
   link:
     description: Link with discord
+    aliases: [clink, dclink]
   unlink:
     description: Unlink with discord
+    aliases: [cunlink, dcunlink]
   data:
     description: Get/Set the data
+    aliases: [cdata, connectdata]
 
 permissions:
   connect.data.set:

@@ -120,7 +120,7 @@ public class DataCommand implements CommandExecutor {
                     return;
                 }
 
-                sender.sendMessage(Prefix.SYSTEM.key() + "The data value §e" + key + "§7 is not §a" + final_value + "§7!");
+                sender.sendMessage(Prefix.SYSTEM.key() + "The data value §e" + key + "§7 is now §a" + final_value + "§7!");
             });
             return true;
         }

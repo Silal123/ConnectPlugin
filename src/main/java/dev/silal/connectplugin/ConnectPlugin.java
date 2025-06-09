@@ -21,7 +21,10 @@ import java.net.URL;
 
 public final class ConnectPlugin extends JavaPlugin {
 
-    public static String API_BASE = "https://api.conbot.xyz";
+    private static final boolean development = false;
+    public static boolean isDevelopment() { return development; }
+
+    public static String API_BASE = development ? "http://localhost:8080" : "https://api.conbot.xyz";
     public static String FRE_BASE = "https://localhost:5173";
 
     private static ConnectPlugin instance;

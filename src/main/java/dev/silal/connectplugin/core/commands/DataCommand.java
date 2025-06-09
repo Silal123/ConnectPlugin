@@ -65,6 +65,11 @@ public class DataCommand implements CommandExecutor {
         final UUID final_uuid = uuid;
 
         if (action.equals("get")) {
+            if (sender instanceof Player p && !p.hasPermission(Permission.GET_DATA.key())) {
+                sender.sendMessage(Prefix.SYSTEM.key() + "You don`t have §cpermission§7 to do that!");
+                return true;
+            }
+
             Bukkit.getScheduler().runTaskAsynchronously(ConnectPlugin.getInstance(), () -> {
                 String value = null;
                 try {
@@ -86,6 +91,11 @@ public class DataCommand implements CommandExecutor {
         }
 
         if (action.equals("set")) {
+            if (sender instanceof Player p && !p.hasPermission(Permission.SET_DATA.key())) {
+                sender.sendMessage(Prefix.SYSTEM.key() + "You don`t have §cpermission§7 to do that!");
+                return true;
+            }
+
             if (args.length < 4) {
                 sender.sendMessage(Prefix.SYSTEM.key() + "Please specify a §evalue§7!");
                 return true;

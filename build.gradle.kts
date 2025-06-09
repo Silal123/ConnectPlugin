@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "dev.silal"
-version = "1.0"
+version = "1.1"
 
 tasks.processResources {
     filesMatching("plugin.yml") {

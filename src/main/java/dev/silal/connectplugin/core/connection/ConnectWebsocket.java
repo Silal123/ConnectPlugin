@@ -106,6 +106,11 @@ public class ConnectWebsocket implements WebSocket.Listener {
         open = false;
         this.plugin.getLogger().warning("Websocket closed");
         reconnect();
+
+        if (statusCode == 2) {
+            this.plugin.getLogger().warning("Invalid token provided!");
+        }
+
         return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
     }
 

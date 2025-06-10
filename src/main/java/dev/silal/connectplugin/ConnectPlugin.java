@@ -1,9 +1,8 @@
 package dev.silal.connectplugin;
 
-import dev.silal.connectplugin.core.commands.BotCommand;
-import dev.silal.connectplugin.core.commands.DataCommand;
-import dev.silal.connectplugin.core.commands.LinkCommand;
-import dev.silal.connectplugin.core.commands.UnlinkCommand;
+import dev.silal.connectplugin.core.Scheduler;
+import dev.silal.connectplugin.core.commands.*;
+import dev.silal.connectplugin.core.commands.tabcompleter.ConnectPluginCommandTabCompleter;
 import dev.silal.connectplugin.core.commands.tabcompleter.DataCommandTabCompleter;
 import dev.silal.connectplugin.core.connection.DataStorage;
 import dev.silal.connectplugin.core.connection.ConnectWebsocket;
@@ -12,6 +11,7 @@ import dev.silal.connectplugin.core.listeners.PlayerDeathListener;
 import dev.silal.connectplugin.core.listeners.PlayerJoinListener;
 import dev.silal.connectplugin.core.listeners.PlayerQuitListener;
 import dev.silal.connectplugin.core.placeholderapi.ConnectPlaceholder;
+import dev.silal.connectplugin.core.system.ScoreboardBind;
 import dev.silal.connectplugin.core.utils.Configuration;
 import dev.silal.connectplugin.core.utils.JsonManager;
 import dev.silal.connectplugin.core.utils.Metrics;
@@ -61,6 +61,11 @@ public final class ConnectPlugin extends JavaPlugin {
         this.websocket = client;
     }
 
+    private ScoreboardBind scoreboardBind;
+    public ScoreboardBind getScoreboardBind() {
+        return scoreboardBind;
+    }
+
     private Metrics metrics;
 
     @Override
@@ -72,6 +77,7 @@ public final class ConnectPlugin extends JavaPlugin {
 
         config = new Configuration(this);
         dataStorage = new DataStorage(this);
+        scoreboardBind = new ScoreboardBind(this);
         getLogger().info("Api ready!");
 
         getLogger().info("Checking for updates...");
@@ -106,12 +112,17 @@ public final class ConnectPlugin extends JavaPlugin {
         getCommand("data").setTabCompleter(new DataCommandTabCompleter());
 
         getCommand("bot").setExecutor(new BotCommand());
+
+        getCommand("connectplugin").setExecutor(new ConnectPluginCommand());
+        getCommand("connectplugin").setTabCompleter(new ConnectPluginCommandTabCompleter());
+
+        Scheduler.start();
     }
 
     @Override
     public void onDisable() {
         getWebsocket().getSocket().sendClose(10, "Server shutdown");
-        // Plugin shutdown logic
+        Scheduler.stop();
     }
 
     private void checkForUpdates() {

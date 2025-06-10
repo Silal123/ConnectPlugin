@@ -26,7 +26,7 @@ public class DataCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
-        if (sender instanceof Player p && !(p.hasPermission(Permission.GET_DATA.key()) || p.hasPermission(Permission.SET_DATA.key()))) {
+        if (!sender.hasPermission(Permission.GET_DATA.key()) && !sender.hasPermission(Permission.SET_DATA.key())) {
             sender.sendMessage(Prefix.SYSTEM.key() + "You don`t have §cpermission§7 to do that!");
             return true;
         }
@@ -65,7 +65,7 @@ public class DataCommand implements CommandExecutor {
         final UUID final_uuid = uuid;
 
         if (action.equals("get")) {
-            if (sender instanceof Player p && !p.hasPermission(Permission.GET_DATA.key())) {
+            if (!sender.hasPermission(Permission.GET_DATA.key())) {
                 sender.sendMessage(Prefix.SYSTEM.key() + "You don`t have §cpermission§7 to do that!");
                 return true;
             }
@@ -91,7 +91,7 @@ public class DataCommand implements CommandExecutor {
         }
 
         if (action.equals("set")) {
-            if (sender instanceof Player p && !p.hasPermission(Permission.SET_DATA.key())) {
+            if (!sender.hasPermission(Permission.SET_DATA.key())) {
                 sender.sendMessage(Prefix.SYSTEM.key() + "You don`t have §cpermission§7 to do that!");
                 return true;
             }

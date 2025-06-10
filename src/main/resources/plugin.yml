@@ -21,9 +21,14 @@ commands:
   bot:
     description: Get the bot invite
     aliases: [cbot]
+  connectplugin:
+    description: Setup command
+    aliases: [cp, conpl]
 
 permissions:
   connect.data.set:
     default: op
   connect.data.get:
+    default: op
+  connect.server.setup:
     default: op

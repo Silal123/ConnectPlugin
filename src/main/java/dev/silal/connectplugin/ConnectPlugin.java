@@ -6,11 +6,17 @@ import dev.silal.connectplugin.core.commands.LinkCommand;
 import dev.silal.connectplugin.core.commands.UnlinkCommand;
 import dev.silal.connectplugin.core.commands.tabcompleter.DataCommandTabCompleter;
 import dev.silal.connectplugin.core.connection.DataStorage;
+import dev.silal.connectplugin.core.connection.ConnectWebsocket;
+import dev.silal.connectplugin.core.listeners.PlayerChatListener;
+import dev.silal.connectplugin.core.listeners.PlayerDeathListener;
+import dev.silal.connectplugin.core.listeners.PlayerJoinListener;
+import dev.silal.connectplugin.core.listeners.PlayerQuitListener;
 import dev.silal.connectplugin.core.placeholderapi.ConnectPlaceholder;
 import dev.silal.connectplugin.core.utils.Configuration;
 import dev.silal.connectplugin.core.utils.JsonManager;
 import dev.silal.connectplugin.core.utils.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -21,11 +27,13 @@ import java.net.URL;
 
 public final class ConnectPlugin extends JavaPlugin {
 
-    private static final boolean development = false;
+    private static final boolean development = true;
     public static boolean isDevelopment() { return development; }
 
     public static String API_BASE = development ? "http://localhost:8080" : "https://api.conbot.xyz";
     public static String FRE_BASE = "https://localhost:5173";
+
+    public static String API_WEBSOCKET = development ? "ws://localhost:8080/ws" : "wss://api.conbot.xyz/ws";
 
     private static ConnectPlugin instance;
     public static ConnectPlugin getInstance() { return instance; }
@@ -43,6 +51,14 @@ public final class ConnectPlugin extends JavaPlugin {
     private Configuration config;
     public Configuration getConfiguration() {
         return config;
+    }
+
+    private ConnectWebsocket websocket;
+    public ConnectWebsocket getWebsocket() {
+        return websocket;
+    }
+    public void setWebsocket(ConnectWebsocket client) {
+        this.websocket = client;
     }
 
     private Metrics metrics;
@@ -73,6 +89,15 @@ public final class ConnectPlugin extends JavaPlugin {
             new ConnectPlaceholder(this).register();
         }
 
+        getLogger().info("Connecting to websocket...");
+        ConnectWebsocket.connectSocket();
+
+        PluginManager manager = getServer().getPluginManager();
+        manager.registerEvents(new PlayerJoinListener(this), this);
+        manager.registerEvents(new PlayerQuitListener(this), this);
+        manager.registerEvents(new PlayerChatListener(this), this);
+        manager.registerEvents(new PlayerDeathListener(this), this);
+
         getLogger().info("Setting up commands...");
         getCommand("link").setExecutor(new LinkCommand());
         getCommand("unlink").setExecutor(new UnlinkCommand());
@@ -85,6 +110,7 @@ public final class ConnectPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        getWebsocket().getSocket().sendClose(10, "Server shutdown");
         // Plugin shutdown logic
     }
 

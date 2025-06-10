@@ -41,8 +41,8 @@ public class DataCommand implements CommandExecutor {
             uuid = UUID.fromString(args[0]);
         }
 
-        if (uuid == null && Bukkit.getOfflinePlayerIfCached(args[0]) != null) {
-            uuid = Bukkit.getOfflinePlayerIfCached(args[0]).getUniqueId();
+        if (uuid == null && Bukkit.getOfflinePlayer(args[0]).getName() != null) {
+            uuid = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
         }
 
         if (args.length < 2) {

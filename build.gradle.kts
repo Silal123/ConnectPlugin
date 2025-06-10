@@ -28,9 +28,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT")
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("me.clip:placeholderapi:2.11.6")
+
 }
 
 val targetJavaVersion = 16

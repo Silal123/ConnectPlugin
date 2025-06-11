@@ -115,7 +115,7 @@ public class ConnectWebsocket implements WebSocket.Listener {
         this.plugin.getLogger().warning("Websocket disconnected!");
         reconnect();
 
-        if (statusCode == 2) {
+        if (statusCode == 3000) {
             this.plugin.getLogger().warning("Invalid token provided! Please edit the token in your configuration!");
         }
 
@@ -133,6 +133,8 @@ public class ConnectWebsocket implements WebSocket.Listener {
         plugin.getLogger().warning("Websocket error!");
         ex.printStackTrace();
         reconnect();
+
+        WebSocket.Listener.super.onError(webSocket, ex);
     }
 
     /**

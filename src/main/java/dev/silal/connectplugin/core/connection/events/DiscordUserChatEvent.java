@@ -18,7 +18,7 @@ public class DiscordUserChatEvent extends Event implements Cancellable {
         this.discordUserName = discordUserName;
         this.discordUserId = discordUserId;
         this.message = message;
-        this.format = "<dc " + discordUserName + "> %s"; // Default format
+        this.format = "<[dc] " + discordUserName + "> %s"; // Default format
     }
 
     public String getDiscordUserName() {

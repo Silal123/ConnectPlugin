@@ -1,14 +1,13 @@
 package dev.silal.connectplugin.core.connection;
 
 import dev.silal.connectplugin.ConnectPlugin;
+import dev.silal.connectplugin.core.connection.events.DiscordUserChatEvent;
 import dev.silal.connectplugin.core.utils.JsonManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.WebSocket;
-import java.nio.ByteBuffer;
 import java.util.concurrent.CompletionStage;
 
 public class ConnectWebsocket implements WebSocket.Listener {
@@ -87,9 +86,15 @@ public class ConnectWebsocket implements WebSocket.Listener {
                 String name = account.getString("name");
                 String msg = data.getString("message");
 
-                for (Player p : this.plugin.getServer().getOnlinePlayers()) {
-                    p.sendMessage(name + "(Discord) > " + msg);
-                }
+                Bukkit.getScheduler().runTask(ConnectPlugin.getInstance(), () -> {
+                    DiscordUserChatEvent chatEvent = new DiscordUserChatEvent(name, account.hasKey("id") ? account.getLong("id") : 0L, msg);
+                    Bukkit.getPluginManager().callEvent(chatEvent);
+
+                    if (!chatEvent.isCancelled()) {
+                        String formatted = String.format(chatEvent.getFormat(), chatEvent.getMessage());
+                        Bukkit.broadcastMessage(formatted);
+                    }
+                });
             }
         }
     }

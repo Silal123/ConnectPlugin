@@ -1,6 +1,7 @@
 package dev.silal.connectplugin.core.connection;
 
 import dev.silal.connectplugin.ConnectPlugin;
+import dev.silal.connectplugin.core.Scheduler;
 import dev.silal.connectplugin.core.connection.events.DiscordUserChatEvent;
 import dev.silal.connectplugin.core.utils.JsonManager;
 import org.bukkit.Bukkit;
@@ -8,6 +9,8 @@ import org.bukkit.Bukkit;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.WebSocket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 public class ConnectWebsocket implements WebSocket.Listener {
@@ -30,6 +33,11 @@ public class ConnectWebsocket implements WebSocket.Listener {
     public void setSocket(WebSocket socket) { this.socket = socket; }
     public WebSocket getSocket() { return this.socket; }
 
+    private static final List<Integer> schedulers = new ArrayList<>();
+    public static void stopAllHeartbeats() {
+        schedulers.forEach(scheduler -> Bukkit.getScheduler().cancelTask(scheduler));
+    }
+
     public ConnectWebsocket(ConnectPlugin plugin) {
         this.plugin = plugin;
     }
@@ -49,6 +57,7 @@ public class ConnectWebsocket implements WebSocket.Listener {
         Bukkit.getScheduler().runTaskAsynchronously(ConnectPlugin.getInstance(), () -> {
             sendEvent("DATA_UPDATE", ConnectPlugin.getInstance().getServerData());
         });
+
         WebSocket.Listener.super.onOpen(webSocket);
     }
 
@@ -76,6 +85,20 @@ public class ConnectWebsocket implements WebSocket.Listener {
 
         if (!json.hasKey("op")) return;
         int op = json.getInt("op");
+
+        if (op == 0) {
+            if (!json.hasKey("d")) return;
+            JsonManager data = json.get("d");
+
+            long heartbeat = Scheduler.ONE_SECOND * 40;
+            if (data.hasKey("heartbeat")) {
+                heartbeat = Scheduler.ONE_SECOND * data.getLong("heartbeat");
+            }
+
+            schedulers.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(ConnectPlugin.getInstance(), () -> {
+                sendHeartBeat();
+            }, 0, heartbeat));
+        }
 
         if (op == 1) {
             if (!json.hasKey("d") || !json.hasKey("t")) return;
@@ -119,6 +142,8 @@ public class ConnectWebsocket implements WebSocket.Listener {
             this.plugin.getLogger().warning("Invalid token provided! Please edit the token in your configuration!");
         }
 
+        stopAllHeartbeats();
+
         return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
     }
 
@@ -133,6 +158,8 @@ public class ConnectWebsocket implements WebSocket.Listener {
         plugin.getLogger().warning("Websocket error!");
         ex.printStackTrace();
         reconnect();
+
+        schedulers.forEach(scheduler -> Bukkit.getScheduler().cancelTask(scheduler));
 
         WebSocket.Listener.super.onError(webSocket, ex);
     }
@@ -167,6 +194,10 @@ public class ConnectWebsocket implements WebSocket.Listener {
         sendJson(buildEvent(event, data));
     }
 
+    public void sendHeartBeat() {
+        sendJson(new JsonManager().addProperty("op", 2).addProperty("d", (String) null));
+    }
+
     /**
     * Builder for a event
     *
@@ -191,6 +222,7 @@ public class ConnectWebsocket implements WebSocket.Listener {
     public static void connectSocket() {
         Bukkit.getScheduler().runTaskAsynchronously(ConnectPlugin.getInstance(), () -> {
             try {
+                stopAllHeartbeats();
                 ConnectPlugin.getInstance().getLogger().info("Trying to connect to websocket...");
                 URI uri = URI.create(ConnectPlugin.API_WEBSOCKET);
 

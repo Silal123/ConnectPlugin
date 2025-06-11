@@ -179,6 +179,7 @@ public final class ConnectPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        ConnectWebsocket.stopAllHeartbeats();
         if (getWebsocket() != null && getWebsocket().getSocket() != null) {
             getLogger().info("Closing websocket!");
             getWebsocket().getSocket().sendClose(10, "Server shutdown").thenRun(() -> { getLogger().info("Websocket closed!"); });

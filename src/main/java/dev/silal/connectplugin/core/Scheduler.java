@@ -10,9 +10,9 @@ import java.util.List;
 
 public class Scheduler {
 
-    private final static int ONE_TICK = 1;
-    private final static int ONE_SECOND = 20 * ONE_TICK;
-    private final static int ONE_MINUTE = 60 * ONE_SECOND;
+    public final static int ONE_TICK = 1;
+    public final static int ONE_SECOND = 20 * ONE_TICK;
+    public final static int ONE_MINUTE = 60 * ONE_SECOND;
 
     private final static List<Integer> schedulers = new ArrayList<>();
     private static boolean isFirstRun = true;

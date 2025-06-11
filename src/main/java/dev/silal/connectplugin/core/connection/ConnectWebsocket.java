@@ -45,6 +45,10 @@ public class ConnectWebsocket implements WebSocket.Listener {
         open = true;
         plugin.getLogger().info("Websocket connection opened");
         webSocket.sendText(new JsonManager().addProperty("token", plugin.getConfiguration().getApiKey()).toJsonString(), true);
+
+        Bukkit.getScheduler().runTaskAsynchronously(ConnectPlugin.getInstance(), () -> {
+            sendEvent("DATA_UPDATE", ConnectPlugin.getInstance().getServerData());
+        });
         WebSocket.Listener.super.onOpen(webSocket);
     }
 

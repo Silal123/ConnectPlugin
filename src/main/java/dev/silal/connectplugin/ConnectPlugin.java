@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 public final class ConnectPlugin extends JavaPlugin {
 
@@ -64,6 +65,16 @@ public final class ConnectPlugin extends JavaPlugin {
     private ScoreboardBind scoreboardBind;
     public ScoreboardBind getScoreboardBind() {
         return scoreboardBind;
+    }
+
+    public JsonManager getServerData() {
+        JsonManager players = new JsonManager();
+        Bukkit.getOnlinePlayers().forEach(player -> players.addProperty(player.getUniqueId().toString(), player.getName()));
+
+        JsonManager plugins = new JsonManager();
+        Arrays.stream(Bukkit.getServer().getPluginManager().getPlugins()).toList().forEach(plugin1 -> { plugins.addProperty(plugin1.getName(), plugin1.getDescription().getVersion()); });
+
+        return new JsonManager().addProperty("players", players).addProperty("motd", Bukkit.getServer().getMotd()).addProperty("max_players", Bukkit.getServer().getMaxPlayers()).addProperty("whitelist", Bukkit.getServer().hasWhitelist()).addProperty("server_version", Bukkit.getServer().getVersion()).addProperty("minecraft_version", Bukkit.getServer().getBukkitVersion()).addProperty("plugins", plugins);
     }
 
     private Metrics metrics;

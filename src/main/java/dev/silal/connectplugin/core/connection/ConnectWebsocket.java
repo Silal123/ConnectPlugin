@@ -143,7 +143,6 @@ public class ConnectWebsocket implements WebSocket.Listener {
     * */
     public void sendMessage(String message) {
         if (socket != null && open) {
-            System.out.println(message);
             socket.sendText(message, true);
         }
     }

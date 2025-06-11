@@ -28,7 +28,7 @@ import java.util.Arrays;
 
 public final class ConnectPlugin extends JavaPlugin {
 
-    private static final boolean development = true;
+    private static final boolean development = false;
     public static boolean isDevelopment() { return development; }
 
     public static String API_BASE = development ? "http://localhost:8080" : "https://api.conbot.xyz";

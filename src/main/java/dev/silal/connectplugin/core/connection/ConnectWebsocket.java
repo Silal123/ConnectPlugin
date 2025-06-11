@@ -71,7 +71,6 @@ public class ConnectWebsocket implements WebSocket.Listener {
     * @param message The message as a string
     * */
     public void onMessage(String message) {
-        System.out.println(message);
         if (!JsonManager.isValidJson(message)) return;
         JsonManager json = new JsonManager(message);
 

@@ -29,6 +29,12 @@ import java.util.Arrays;
 public final class ConnectPlugin extends JavaPlugin {
 
     private static final boolean development = false;
+
+    /**
+    * Get if the plugin is in development
+    *
+    * @return Development status
+    * */
     public static boolean isDevelopment() { return development; }
 
     public static String API_BASE = development ? "http://localhost:8080" : "https://api.conbot.xyz";
@@ -37,36 +43,77 @@ public final class ConnectPlugin extends JavaPlugin {
     public static String API_WEBSOCKET = development ? "ws://localhost:8080/ws" : "wss://api.conbot.xyz/ws";
 
     private static ConnectPlugin instance;
+    /**
+    * Get the plugin instance
+    *
+    * @return The instance of ConnectPlugin
+    * */
     public static ConnectPlugin getInstance() { return instance; }
 
     private File pluginFolder;
+    /**
+    * Get the data folder of the plugin
+    *
+    * @return The data folder
+    * */
     public File getPluginFolder() {
         return pluginFolder;
     }
 
     private DataStorage dataStorage;
+    /**
+    * Get the data Storage wich is used to get the UserData
+    *
+    * @return The DataStorage object
+    * */
     public DataStorage getDataStorage() {
         return dataStorage;
     }
 
     private Configuration config;
+    /**
+    * The configuration of the plugin
+    *
+    * @return The plugin Configuration
+    * */
     public Configuration getConfiguration() {
         return config;
     }
 
     private ConnectWebsocket websocket;
+    /**
+    * Get the websocket wich is connected to the api
+    *
+    * @return The websocket
+    * */
     public ConnectWebsocket getWebsocket() {
         return websocket;
     }
+
+    /**
+    * Set the Websocket (Not recommended)
+    *
+    * @param client The websocket client
+    * */
     public void setWebsocket(ConnectWebsocket client) {
         this.websocket = client;
     }
 
     private ScoreboardBind scoreboardBind;
+    /**
+    * Get the ScoreboardBind object wich is used to sync the scoreboard with the database
+    *
+    * @return The scoreboard binding
+    * */
     public ScoreboardBind getScoreboardBind() {
         return scoreboardBind;
     }
 
+    /**
+    * Get a Json object with the server dat
+    *
+    * @return a JsonManage with the server data
+    * */
     public JsonManager getServerData() {
         JsonManager players = new JsonManager();
         Bukkit.getOnlinePlayers().forEach(player -> players.addProperty(player.getUniqueId().toString(), player.getName()));

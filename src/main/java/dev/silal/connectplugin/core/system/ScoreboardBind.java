@@ -15,6 +15,9 @@ public class ScoreboardBind {
         this.plugin = plugin;
     }
 
+    /**
+    * Sync all scoreboard objectives wich are configured
+    * */
     public void syncData() {
         for (Map.Entry<String, String> entry : plugin.getConfiguration().getBoundScoreboards().entrySet()) {
             String objective = entry.getKey();
@@ -24,11 +27,22 @@ public class ScoreboardBind {
         }
     }
 
+    /**
+    * Sync the data of one configured scoreboard objective
+    *
+    * @param objective The objective to sync
+    * */
     public void syncData(String objective) {
         String key = ConnectPlugin.getInstance().getConfiguration().getBoundScoreboardKey(objective);
         syncData(objective, key);
     }
 
+    /**
+    * Sync a objective to a data key
+    *
+    * @param objective The objective to sync
+    * @param key The data key to sync it with
+    * */
     public void syncData(String objective, String key) {
         Scoreboard scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
 

@@ -43,7 +43,7 @@ public class ConnectWebsocket implements WebSocket.Listener {
     @Override
     public void onOpen(WebSocket webSocket) {
         open = true;
-        plugin.getLogger().info("Websocket connection opened");
+        plugin.getLogger().info("Websocket successfully connected!");
         webSocket.sendText(new JsonManager().addProperty("token", plugin.getConfiguration().getApiKey()).toJsonString(), true);
 
         Bukkit.getScheduler().runTaskAsynchronously(ConnectPlugin.getInstance(), () -> {
@@ -113,11 +113,11 @@ public class ConnectWebsocket implements WebSocket.Listener {
     @Override
     public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
         open = false;
-        this.plugin.getLogger().warning("Websocket closed");
+        this.plugin.getLogger().warning("Websocket disconnected!");
         reconnect();
 
         if (statusCode == 2) {
-            this.plugin.getLogger().warning("Invalid token provided!");
+            this.plugin.getLogger().warning("Invalid token provided! Please edit the token in your configuration!");
         }
 
         return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
@@ -131,7 +131,7 @@ public class ConnectWebsocket implements WebSocket.Listener {
     * */
     @Override
     public void onError(WebSocket webSocket, Throwable ex) {
-        plugin.getLogger().warning("Websocket disconnect");
+        plugin.getLogger().warning("Websocket error!");
         ex.printStackTrace();
         reconnect();
     }
@@ -190,7 +190,7 @@ public class ConnectWebsocket implements WebSocket.Listener {
     public static void connectSocket() {
         Bukkit.getScheduler().runTaskAsynchronously(ConnectPlugin.getInstance(), () -> {
             try {
-                ConnectPlugin.getInstance().getLogger().info("Creating websocket connection");
+                ConnectPlugin.getInstance().getLogger().info("Trying to connect to websocket...");
                 URI uri = URI.create(ConnectPlugin.API_WEBSOCKET);
 
                 ConnectWebsocket listener = new ConnectWebsocket(ConnectPlugin.getInstance());
@@ -207,7 +207,6 @@ public class ConnectWebsocket implements WebSocket.Listener {
                 ConnectPlugin.getInstance().getLogger().warning("Failed to reconnect!");
 
                 try { Thread.sleep(10_000); } catch (Exception ex) {}
-                ConnectPlugin.getInstance().getLogger().info("Reconnecting...");
                 connectSocket();
             }
         });

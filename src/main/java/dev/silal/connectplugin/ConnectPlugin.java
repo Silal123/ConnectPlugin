@@ -132,7 +132,11 @@ public final class ConnectPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getWebsocket().getSocket().sendClose(10, "Server shutdown");
+        if (getWebsocket() != null && getWebsocket().getSocket() != null) {
+            getLogger().info("Closing websocket!");
+            getWebsocket().getSocket().sendClose(10, "Server shutdown").thenRun(() -> { getLogger().info("Websocket closed!"); });
+            getWebsocket().getSocket().abort();
+        }
         Scheduler.stop();
     }
 

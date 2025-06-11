@@ -205,7 +205,7 @@ public class ConnectWebsocket implements WebSocket.Listener {
             } catch (Exception e) {
                 ConnectPlugin.getInstance().getLogger().warning("Failed to reconnect!");
 
-                try { Thread.sleep(10_000); } catch (Exception ex) {}
+                try { Thread.sleep(30_000); } catch (Exception ex) {}
                 connectSocket();
             }
         });
